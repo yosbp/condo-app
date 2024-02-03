@@ -73,6 +73,7 @@ import { useAppStore } from '@/stores/index';
 const store = useAppStore();
 const showTopButton = ref(false);
 const { setLocale } = useI18n();
+
 onMounted(() => {
     // set default settings
     appSetting.init(setLocale);

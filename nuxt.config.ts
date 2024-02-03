@@ -1,13 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-
+  ssr: false,
   app: {
     head: {
-      title: 'Sales Admin | VRISTO - Multipurpose Tailwind Dashboard Template',
-      titleTemplate: '%s | VRISTO - Multipurpose Tailwind Dashboard Template',
+      title: 'CONDO - Gestiona Tu Condominio de Manera Eficiente',
+      titleTemplate: '%s | CONDO - Gestiona Tu Condominio de Manera Eficiente',
       htmlAttrs: {
-        lang: 'en',
+        lang: 'es',
       },
       meta: [
         { charset: 'utf-8' },
@@ -19,7 +19,7 @@ export default defineNuxtConfig({
         { name: 'format-detection', content: 'telephone=no' },
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap',
@@ -36,7 +36,6 @@ export default defineNuxtConfig({
     },
   },
   modules: ['@pinia/nuxt', '@nuxtjs/i18n'],
-
   i18n: {
     locales: [
       { code: 'en', file: 'en.json' },
@@ -47,10 +46,7 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
     langDir: 'locales/',
   },
-  vite: {
-    optimizeDeps: { include: ['quill'] },
-  },
   router: {
     options: { linkExactActiveClass: 'active' },
   },
-})
+});

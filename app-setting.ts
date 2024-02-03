@@ -18,7 +18,7 @@ export default {
         val = val || $themeConfig.layout;
         store.toggleLayout(val);
 
-        val = localStorage.getItem('i18n_locale'); // en, da, de, el, es, fr, hu, it, ja, pl, pt, ru, sv, tr, zh
+        val = localStorage.getItem('i18n_locale'); // en, es
 
         val = val || $themeConfig.locale;
 

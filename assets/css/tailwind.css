@@ -1,6 +1,18 @@
 /* animation */
 @import 'animate.css';
 
+/* vue3-datatable */
+@import 'datatable.css';
+
+/* form element*/
+@import 'form-elements.css';
+
+/* Select2 */
+@import 'select2.css';
+
+/* Flatpickr */
+@import 'flatpickr.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
