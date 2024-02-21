@@ -20,10 +20,18 @@
     feedback.value = '';
     try {
       const response = await auth.login(credentials.value);
-      if (response.condominium === null) {
-        router.push('/complete-data');
-      } else {
-        router.push('/');
+      if (response.user.role === 'administrator') {
+        if (response.administrator?.condominium === null) {
+          router.push('/create-condominium');
+        } else {
+          router.push('/admin');
+        }
+      } else if (response.user.role === 'owner') {
+        if (response.owner?.is_verified === false) {
+          router.push('/assign-condominium');
+        } else {
+          router.push('/user');
+        }
       }
     } catch (error: any) {
       feedback.value = error;
@@ -33,7 +41,7 @@
 
 <template>
   <div class="text-start mb-7">
-    <a href="index.html" class="grow block mb-8">
+    <a href="" class="grow block mb-8">
       <img class="h-16 mx-auto" src="/assets/images/logo.png" alt="images" />
     </a>
 

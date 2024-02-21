@@ -10,10 +10,11 @@ export interface Unit{
 }
 
 export interface CreateUnit{
+    unit_type_id: string;
     unit_number: string;
     owner_name: string;
-    balance: number;
     type: string;
+    balance: number;
 }
 
 export interface CreateUnitResponse{

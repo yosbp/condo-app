@@ -2,55 +2,44 @@
   import { ref } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
   import { showMessage } from '#imports';
-  import useExpenseStore from '~/stores/expenseStore';
-  import type { CreateExpense, Expense } from '~/types/Expense';
+  import useUnitStore from '~/stores/unitStore';
   import type { I18n } from 'vue-i18n';
+  import type { UnitType } from '~/types/UnitType';
 
   const { t } = useI18n<I18n>();
+  const unitStore = useUnitStore();
 
-  const expenseStore = useExpenseStore();
-
-  useHead({ title: t('expenses') });
+  useHead({ title: t('units-types') });
   const search = ref('');
   const rows = ref();
   const cols =
     ref([
+      { field: 'name', title: t('name') },
       { field: 'description', title: t('description') },
-      { field: 'amount', title: t('amount') },
-      { field: 'date', title: t('payment-date') },
-      { field: 'created_at', title: t('created-at') },
+      { field: 'percentage', title: t('percentage') },
+      { field: 'actions', title: t('actions') },
     ]) || [];
 
   watchEffect(() => {
-    rows.value = expenseStore.expenses;
+    rows.value = unitStore.units_types;
   });
 
-  const formatDate = (date: any) => {
-    if (date) {
-      const dt = new Date(date);
-      const month = dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1;
-      const day = dt.getDate() < 10 ? '0' + dt.getDate() : dt.getDate();
-      return day + '/' + month + '/' + dt.getFullYear();
-    }
-    return '';
-  };
-
-  const defaultParams = ref<CreateExpense>({
+  const defaultParams = ref({
+    name: '',
     description: '',
-    amount: 0,
-    date: new Date(),
+    percentage: 0,
   });
 
   const params = ref(defaultParams.value);
   const isModalVisible = ref(false);
 
-  const addExpense = () => {
+  const addUnitType = () => {
     params.value = JSON.parse(JSON.stringify(defaultParams.value));
     isModalVisible.value = true;
   };
 
-  const editExpense = (expense: Expense) => {
-    params.value = expense;
+  const editUnitType = (unitType: UnitType) => {
+    params.value = unitType;
     isModalVisible.value = true;
   };
 
@@ -60,19 +49,19 @@
   }; */
 
   onMounted(async () => {
-    await expenseStore.getExpenses();
+    await unitStore.getUnitTypes();
   });
 </script>
 
 <template>
   <div>
-    <h1 class="text-4xl font-semibold dark:text-white-light text-center">{{ $t('expenses') }}</h1>
+    <h1 class="text-4xl font-semibold dark:text-white-light text-center">{{ $t('units-types') }}</h1>
     <div class="panel mt-6 pb-0">
       <div class="mb-5 flex flex-col gap-5 md:flex-row md:items-center">
         <div class="flex flex-wrap items-center">
-          <button type="button" class="btn btn-primary btn-sm m-1" @click="addExpense()">
+          <button type="button" class="btn btn-primary btn-sm m-1" @click="addUnitType()">
             <icon-plus class="w-5 h-5 ltr:mr-2 rtl:ml-2" />
-            {{ $t('new-expense') }}
+            {{ $t('new-unit-type') }}
           </button>
         </div>
 
@@ -90,18 +79,16 @@
           :sortable="true"
           sortColumn="firstName"
           :noDataContent="'No se encontraron datos'"
+          paginationInfo="Mostrando {0} a {1} de {2} entradas"
           skin="whitespace-nowrap bh-table-hover"
           firstArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
           lastArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg> '
           previousArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
           nextArrow='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>'
         >
-          <template #created_at="data">
-            {{ formatDate(data.value.created_at) }}
-          </template>
           <template #actions="data">
             <div class="flex items-center justify-center gap-4">
-              <button type="button" class="btn btn-sm btn-outline-primary" @click="editExpense(data.value)">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-primary" @click="editUnitType(data.value)">{{ $t('edit') }}</button>
               <!-- <button type="button" class="btn btn-sm btn-outline-danger" @click="deleteUnit(data.value)">Delete</button> -->
             </div>
           </template>
@@ -110,5 +97,5 @@
     </div>
   </div>
 
-  <ModalsAddEditExpenseModal v-model:is-modal-visible="isModalVisible" v-model:params="params" @get-expenses="expenseStore.getExpenses" />
+  <ModalsAddEditUnitTypeModal v-model:is-modal-visible="isModalVisible" v-model:params="params" @get-units-types="unitStore.getUnitTypes" />
 </template>

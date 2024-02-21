@@ -22,7 +22,8 @@ export interface LoginResponse {
   user: User;
   token: string;
   status: boolean;
-  condominium: Condominium | null;
+  owner?:  OwnerLoginResponse;
+  administrator?: AdministratorLoginResponse;
 }
 
 export interface RegisterResponse {
@@ -30,4 +31,24 @@ export interface RegisterResponse {
   token: string;
   message: string;
   status: boolean;
+}
+
+export interface OwnerLoginResponse{
+  unit_id: string;
+  is_verified: boolean;
+}
+
+export interface AdministratorLoginResponse{
+  condominium: Condominium | null;
+}
+
+export interface OwnerUser {
+  id: string;
+  name: string;
+  role: string;
+  owner: {
+    id: string;
+    unit_id: string;
+    is_verified: boolean;
+  }
 }

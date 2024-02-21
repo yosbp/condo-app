@@ -14,14 +14,14 @@
     name: '',
     email: '',
     password: '',
-    role: 'administrator',
+    role: 'owner',
   });
 
   const register = async () => {
     feedback.value = '';
     try {
       await auth.register(credentials.value);
-      router.push('/complete-data');
+      router.push('/assign-condominium');
     } catch (error: any) {
       feedback.value = error;
     }
@@ -30,7 +30,7 @@
 
 <template>
   <div class="text-start mb-7">
-    <a href="index.html" class="grow block mb-8">
+    <a href="" class="grow block mb-8">
       <img class="h-16 mx-auto" src="/assets/images/logo.png" alt="images" />
     </a>
 

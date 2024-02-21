@@ -5,12 +5,13 @@
   import useUnitStore from '~/stores/unitStore';
   import type { CreateUnit, Unit } from '~/types/Unit';
   import type { I18n } from 'vue-i18n';
+  import type { CreateUnitType } from '~/types/UnitType';
 
   const { t } = useI18n<I18n>();
 
   interface Emit {
     (e: 'update:isModalVisible', value: boolean): void;
-    (e: 'getUnits'): void;
+    (e: 'getUnitsTypes'): void;
   }
 
   interface Props {
@@ -21,60 +22,56 @@
   const props = withDefaults(defineProps<Props>(), {});
   const emit = defineEmits<Emit>();
   const unitStore = useUnitStore();
-  const unitTypes = ref();
 
   const options = ref([
     { name: 'Casa', value: 'home' },
     { name: 'Apartamento', value: 'apartment' },
   ]);
 
-  const unit = ref<CreateUnit>({
-    unit_type_id: '',
-    unit_number: '',
-    owner_name: '',
-    balance: 0,
-    type: '',
+  const unitType = ref<CreateUnitType>({
+    name: '',
+    description: '',
+    percentage: 0,
   });
 
   const typeSelected = ref('');
 
   watchEffect(() => {
-    unit.value = {
-      unit_type_id: props.params.unit_type_id ? props.params.unit_type_id : '',
-      unit_number: props.params.unit_number ? props.params.unit_number : '',
-      owner_name: props.params.owner_name ? props.params.owner_name : '',
-      balance: props.params.balance ? props.params.balance : 0,
-      type: props.params.type ? props.params.type : 'home',
+    unitType.value = {
+      name: props.params.name ? props.params.name : '',
+      description: props.params.description ? props.params.description : '',
+      percentage: props.params.percentage ? props.params.percentage : 0,
     };
-    unitTypes.value = unitStore.units_types;
   });
 
   const saveUnit = async () => {
     if (props.params.id) {
       //update unit
-      let newUnit: any;
-      newUnit = {
+      let newUnitType: any;
+      newUnitType = {
         id: props.params.id,
-        owner_name: unit.value.owner_name,
+        name: unitType.value.name,
+        description: unitType.value.description,
+        percentage: unitType.value.percentage,
       };
 
       try {
-        await unitStore.updateUnit(newUnit);
-        showMessage(t('unit-updated-successfully'));
+        await unitStore.updateUnitType(newUnitType);
+        showMessage(t('unit-type-updated-successfully'));
         emit('update:isModalVisible', false);
-        emit('getUnits');
+        emit('getUnitsTypes');
       } catch (error) {
         showMessage(t('error-updating-unit'), 'error');
       }
     } else {
       //add unique unit
       try {
-        await unitStore.createUnit(unit.value);
-        showMessage(t('unit-created-successfully'));
+        await unitStore.createUnitType(unitType.value);
+        showMessage(t('unit-type-created-successfully'));
         emit('update:isModalVisible', false);
-        emit('getUnits');
+        emit('getUnitsTypes');
       } catch (error) {
-        showMessage(t('error-creating-unit'), 'error');
+        showMessage(t('error-creating-unit-type'), 'error');
       }
     }
   };
@@ -82,14 +79,6 @@
   const handleCloseModal = () => {
     emit('update:isModalVisible', false);
   };
-
-  const onSelect = (option: any) => {
-    unit.value.type = option.value;
-  };
-  
-  onMounted(() => {
-    unitStore.getUnitTypes();
-  });
 </script>
 
 <template>
@@ -128,58 +117,31 @@
                 <icon-x />
               </button>
               <div class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pr-5 rtl:pl-[50px] dark:bg-[#121c2c]">
-                {{ props.params.id ? $t('edit-unit') : $t('add-unit') }}
+                {{ props.params.id ? $t('edit-unit-type') : $t('add-unit-type') }}
               </div>
               <div class="p-5">
                 <form @submit.prevent="saveUnit()">
-                  <!-- Unit Type -->
-                  <div class="mb-5">
-                    <label for="name">{{ $t('unit-type') }}</label>
-                    <multiselect
-                      v-model="unit.unit_type_id"
-                      :options="unitTypes"
-                      class="custom-multiselect"
-                      label="name"
-                      placeholder="Selecciona una opción"
-                      :searchable="false"
-                      :allow-empty="false"
-                      selected-label=""
-                      select-label=""
-                      deselect-label=""
-                    ></multiselect>
-                  </div>
                   <!-- Unit Number -->
-                  <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('unit-number') }}</label>
-                    <input required id="name" type="text" placeholder="Ej. PB-1" class="form-input" v-model="unit.unit_number" />
+                  <div class="mb-5">
+                    <label for="name">{{ $t('name') }}</label>
+                    <input required id="name" type="text" placeholder="Ej. Apartamento Esquina" class="form-input" v-model="unitType.name" />
                   </div>
                   <!-- Owner Name -->
                   <div class="mb-5">
-                    <label for="name">{{ $t('owner-name') }}</label>
-                    <input required id="name" type="text" :placeholder="$t('enter-owner-name')" class="form-input" v-model="unit.owner_name" />
+                    <label for="name">{{ $t('description') }}</label>
+                    <input required id="name" type="text" :placeholder="$t('enter-description')" class="form-input" v-model="unitType.description" />
                   </div>
                   <!-- Balance -->
-                  <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('balance') }}</label>
-                    <input required id="name" type="number" :placeholder="$t('enter-balance')" class="form-input" v-model="unit.balance" />
-                  </div>
-                  <!-- Type -->
-                  <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('type') }}</label>
-                    <multiselect
-                      v-model="typeSelected"
-                      :options="options"
-                      class="custom-multiselect"
-                      label="name"
-                      :searchable="false"
-                      placeholder="Selecciona una opción"
-                      :preselect-first="true"
-                      :allow-empty="false"
-                      selected-label=""
-                      select-label=""
-                      deselect-label=""
-                      @select="onSelect"
-                    ></multiselect>
+                  <div class="mb-5">
+                    <label for="name">{{ $t('percentage') }}</label>
+                    <div class="flex">
+                      <div
+                        class="bg-[#eee] flex justify-center items-center ltr:rounded-l-md rtl:rounded-r-md px-3 font-semibold border ltr:border-r-0 rtl:border-l-0 border-[#e0e6ed] dark:border-[#17263c] dark:bg-[#1b2e4b]"
+                      >
+                        %
+                      </div>
+                      <input required step="0.01" type="number" :placeholder="$t('enter-percentage')" class="form-input" v-model="unitType.percentage" />
+                    </div>
                   </div>
                   <div class="mt-8 flex items-center justify-end">
                     <button type="button" class="btn btn-outline-danger" @click="handleCloseModal()">Cancel</button>

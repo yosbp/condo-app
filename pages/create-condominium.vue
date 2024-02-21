@@ -54,7 +54,7 @@
     feedback.value = '';
     try {
       await condoStore.createCondo(condominium.value);
-      router.push('/');
+      router.push('/admin');
     } catch (error: any) {
       feedback.value = error;
     }

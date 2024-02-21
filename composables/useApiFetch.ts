@@ -11,5 +11,12 @@ export function useApiFetch<T>(path: string | (() => string), options: UseFetchO
       Authorization: `Bearer ${token}`,
       ...options?.headers,
     },
+
+    onResponseError({ response }) {
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+    }
   });
 }

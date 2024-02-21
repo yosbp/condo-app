@@ -1,4 +1,3 @@
-import type { CreateUnit, Unit } from '~/types/Unit';
 import type { CreateIncome, Income } from '~/types/Income';
 
 const useIncomeStore = defineStore('income', {
