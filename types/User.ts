@@ -1,4 +1,4 @@
-import type { Condominium } from "./Condominium";
+import type { Condominium } from './Condominium';
 
 export interface User {
   name: string;
@@ -22,8 +22,11 @@ export interface LoginResponse {
   user: User;
   token: string;
   status: boolean;
-  owner?:  OwnerLoginResponse;
-  administrator?: AdministratorLoginResponse;
+  owner?: OwnerLoginResponse;
+  condominium?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface RegisterResponse {
@@ -33,12 +36,12 @@ export interface RegisterResponse {
   status: boolean;
 }
 
-export interface OwnerLoginResponse{
+export interface OwnerLoginResponse {
   unit_id: string;
   is_verified: boolean;
 }
 
-export interface AdministratorLoginResponse{
+export interface AdministratorLoginResponse {
   condominium: Condominium | null;
 }
 
@@ -50,5 +53,5 @@ export interface OwnerUser {
     id: string;
     unit_id: string;
     is_verified: boolean;
-  }
+  };
 }

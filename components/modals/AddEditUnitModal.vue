@@ -22,6 +22,8 @@
   const emit = defineEmits<Emit>();
   const unitStore = useUnitStore();
   const unitTypes = ref();
+  const typeSelected = ref('');
+  const unitTypeSelected = ref();
 
   const options = ref([
     { name: 'Casa', value: 'home' },
@@ -32,17 +34,19 @@
     unit_type_id: '',
     unit_number: '',
     owner_name: '',
+    owner_phone: '',
+    owner_email: '',
     balance: 0,
     type: '',
   });
 
-  const typeSelected = ref('');
-
   watchEffect(() => {
     unit.value = {
-      unit_type_id: props.params.unit_type_id ? props.params.unit_type_id : '',
+      unit_type_id: unitTypeSelected.value ? unitTypeSelected.value.id : '',
       unit_number: props.params.unit_number ? props.params.unit_number : '',
       owner_name: props.params.owner_name ? props.params.owner_name : '',
+      owner_phone: props.params.owner_phone ? props.params.owner_phone : '',
+      owner_email: props.params.owner_email ? props.params.owner_email : '',
       balance: props.params.balance ? props.params.balance : 0,
       type: props.params.type ? props.params.type : 'home',
     };
@@ -56,6 +60,8 @@
       newUnit = {
         id: props.params.id,
         owner_name: unit.value.owner_name,
+        owner_phone: unit.value.owner_phone,
+        owner_email: unit.value.owner_email,
       };
 
       try {
@@ -86,7 +92,7 @@
   const onSelect = (option: any) => {
     unit.value.type = option.value;
   };
-  
+
   onMounted(() => {
     unitStore.getUnitTypes();
   });
@@ -136,7 +142,7 @@
                   <div class="mb-5">
                     <label for="name">{{ $t('unit-type') }}</label>
                     <multiselect
-                      v-model="unit.unit_type_id"
+                      v-model="unitTypeSelected"
                       :options="unitTypes"
                       class="custom-multiselect"
                       label="name"
@@ -150,7 +156,7 @@
                   </div>
                   <!-- Unit Number -->
                   <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('unit-number') }}</label>
+                    <label for="number">{{ $t('unit-number') }}</label>
                     <input required id="name" type="text" placeholder="Ej. PB-1" class="form-input" v-model="unit.unit_number" />
                   </div>
                   <!-- Owner Name -->
@@ -158,14 +164,24 @@
                     <label for="name">{{ $t('owner-name') }}</label>
                     <input required id="name" type="text" :placeholder="$t('enter-owner-name')" class="form-input" v-model="unit.owner_name" />
                   </div>
+                  <!-- Owner Phone -->
+                  <div class="mb-5">
+                    <label for="name">{{ $t('owner-phone') }}</label>
+                    <input id="phone" type="text" :placeholder="$t('enter-owner-phone')" class="form-input" v-model="unit.owner_phone" />
+                  </div>
+                  <!-- Owner Email -->
+                  <div class="mb-5">
+                    <label for="name">{{ $t('owner-email') }}</label>
+                    <input id="email" type="email" :placeholder="$t('enter-owner-email')" class="form-input" v-model="unit.owner_email" />
+                  </div>
                   <!-- Balance -->
                   <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('balance') }}</label>
+                    <label for="balance">{{ $t('balance') }}</label>
                     <input required id="name" type="number" :placeholder="$t('enter-balance')" class="form-input" v-model="unit.balance" />
                   </div>
                   <!-- Type -->
                   <div class="mb-5" v-if="!props.params.id">
-                    <label for="name">{{ $t('type') }}</label>
+                    <label for="type">{{ $t('type') }}</label>
                     <multiselect
                       v-model="typeSelected"
                       :options="options"
@@ -182,7 +198,7 @@
                     ></multiselect>
                   </div>
                   <div class="mt-8 flex items-center justify-end">
-                    <button type="button" class="btn btn-outline-danger" @click="handleCloseModal()">Cancel</button>
+                    <button type="button" class="btn btn-outline-danger" @click="handleCloseModal()">{{ $t('cancel') }}</button>
                     <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
                       {{ props.params.id ? $t('update') : $t('add') }}
                     </button>

@@ -2,10 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
+
   app: {
     head: {
-      title: 'CONDO - Gestiona Tu Condominio de Manera Eficiente',
-      titleTemplate: '%s | CONDO - Gestiona Tu Condominio de Manera Eficiente',
+      title: 'Tu Condomini - Gestiona Tu Condominio de Manera Eficiente',
+      titleTemplate: '%s | Tu Condomini - Gestiona Tu Condominio de Manera Eficiente',
       htmlAttrs: {
         lang: 'es',
       },
@@ -29,13 +30,20 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/app.css'],
+
+  build: {
+    transpile: ['@headlessui/vue'],
+  },
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   modules: ['@pinia/nuxt', '@nuxtjs/i18n'],
+
   i18n: {
     locales: [
       { code: 'en', file: 'en.json' },
@@ -46,7 +54,10 @@ export default defineNuxtConfig({
     strategy: 'no_prefix',
     langDir: 'locales/',
   },
+
   router: {
     options: { linkExactActiveClass: 'active' },
   },
+
+  compatibilityDate: '2024-09-13',
 });

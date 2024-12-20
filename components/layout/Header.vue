@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, onMounted, computed, reactive, watch } from 'vue';
+  import { ref, onMounted, computed, watch } from 'vue';
   import appSetting from '@/app-setting';
 
   import { useRoute } from 'vue-router';
@@ -11,6 +11,7 @@
   const { setLocale } = useI18n();
   const auth = useAuthStore();
   const userData = ref(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) : null);
+  const condominiumData = ref(localStorage.getItem('condominium') ? JSON.parse(localStorage.getItem('condominium') as string) : null);
 
   const logout = () => {
     auth.logout();
@@ -126,15 +127,12 @@
     <div class="shadow-sm">
       <div class="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-[#0e1726]">
         <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
-          <NuxtLink to="/admin" class="main-logo flex shrink-0 items-center">
-            <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.png" alt="" />
-            <span class="hidden align-middle text-2xl font-semibold transition-all duration-300 ltr:ml-4 rtl:mr-1.5 dark:text-white-light md:inline"
-              >CONDO</span
-            >
+          <NuxtLink to="/admin" class="main-logo items-center w-16 mx-4">
+            <img src="/assets/images/new-logo.png" alt="" />
           </NuxtLink>
           <a
             href="javascript:;"
-            class="collapse-icon flex flex-none rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary ltr:ml-2 rtl:mr-2 dark:bg-dark/40 dark:text-[#d0d2d6] dark:hover:bg-dark/60 dark:hover:text-primary lg:hidden"
+            class="collapse-icon flex flex-none rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary ltr:ml-2 rtl:mr-2 dark:bg-dark/40 dark:text-[#d0d2d6] dark:hover:bg-dark/60 dark:hover:text-primary lg:hidden mr-3"
             @click="store.toggleSidebar()"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +141,9 @@
               <path d="M20 17L4 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </a>
+
         </div>
+        <p class="text-[12px] sm:text-xl font-extrabold">{{ condominiumData.name }}</p>
         <div
           class="flex items-center space-x-1.5 ltr:ml-auto rtl:mr-auto rtl:space-x-reverse dark:text-[#d0d2d6] sm:flex-1 ltr:sm:ml-0 sm:rtl:mr-0 lg:space-x-2"
         >

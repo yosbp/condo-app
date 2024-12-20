@@ -63,8 +63,8 @@
 
 <template>
   <div class="text-start mb-7">
-    <a href="index.html" class="grow block mb-8">
-      <img class="h-16 mx-auto" src="/assets/images/logo.png" alt="images" />
+    <a href="index.html" class="grow block mb-5">
+      <img class="h-16 mx-auto" src="/assets/images/new-logo.png" alt="images" />
     </a>
 
     <div class="text-center">
@@ -76,13 +76,13 @@
   <form class="text-start w-full" @submit.prevent="createCondominium()">
     <!-- Name -->
     <div class="mb-4">
-      <label class="block text-base font-semibold text-dark mb-2">Nombre del Condominio</label>
+      <label class="block text-base font-semibold text-dark mb-2">{{ $t('condominium-name') }}</label>
       <input v-model="condominium.name" class="form-input" type="text" placeholder="Ej. Condominio Pinos A" />
     </div>
     <div class="grid grid-cols-1 sm:flex justify-between gap-3 mb-4">
       <!-- State -->
       <div class="w-1/2">
-        <label class="block text-base font-semibold text-dark mb-2">Estado</label>
+        <label class="block text-base font-semibold text-dark mb-2">{{ $t('state') }}</label>
         <multiselect
           v-model="condominium.state"
           :options="options"
@@ -97,35 +97,35 @@
       </div>
       <!-- City -->
       <div class="w-1/2">
-        <label class="block text-base font-semibold text-dark mb-2">Ciudad</label>
+        <label class="block text-base font-semibold text-dark mb-2">{{ $t('city') }}</label>
         <input required v-model="condominium.city" type="text" class="form-input" placeholder="Ej. Charallave" />
       </div>
     </div>
     <!-- Address -->
     <div class="mb-4">
-      <label class="block text-base font-semibold text-dark mb-2">Dirección</label>
+      <label class="block text-base font-semibold text-dark mb-2">{{ $t('address') }}</label>
       <input required v-model="condominium.address" type="text" class="form-input" placeholder="Ej. Calle 5, Sector Pinos" />
     </div>
     <div class="grid grid-cols-1 sm:flex justify-between gap-3 mb-4">
       <!-- Postal Code -->
       <div class="w-1/3">
-        <label class="block text-base font-semibold text-dark mb-2">Código Postal</label>
+        <label class="block text-base font-semibold text-dark mb-2">{{ $t('postal-code') }}</label>
         <input required v-model="condominium.postal_code" type="text" class="form-input" placeholder="Ej. 1210" />
       </div>
       <!-- Phone -->
       <div class="w-2/3">
-        <label class="block text-base font-semibold text-dark mb-2">Teléfono</label>
+        <label class="block text-base font-semibold text-dark mb-2">{{ $t('phone') }}</label>
         <input required v-model="condominium.phone" type="text" class="form-input" placeholder="Ej. 0212 222.22.22" />
       </div>
     </div>
     <!-- Initial Balance -->
     <div class="mb-4">
-      <label class="block text-base font-semibold text-dark mb-2">Balance Inicial</label>
+      <label class="block text-base font-semibold text-dark mb-2">{{ $t('initial-balance') }}</label>
       <input v-model="condominium.initial_balance" type="number" class="form-input" placeholder="Ej. 1000000" />
     </div>
     <!-- Name To Invoice -->
     <div class="mb-8">
-      <label class="block text-base font-semibold text-dark mb-2">Nombre para la Factura</label>
+      <label class="block text-base font-semibold text-dark mb-2">{{ $t('name-for-invoice') }}</label>
       <input
         v-model="condominium.name_to_invoice"
         type="text"

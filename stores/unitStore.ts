@@ -32,8 +32,7 @@ const useUnitStore = defineStore('unit', {
         this.loading = false;
         throw new Error(error.value?.data.message);
       }
-
-      console.log(data.value);
+      
       this.loading = false;
       return data.value;
     },

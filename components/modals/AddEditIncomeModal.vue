@@ -28,21 +28,22 @@
   const unitStore = useUnitStore();
   const options = ref();
   const selectedUnit = ref<Unit>();
+  const selectedMethod = ref<string>('');
+  const selectedBank = ref<any>('');
 
   const income = ref<CreateIncome>({
     unit_id: '',
     description: '',
+    method: '',
+    bank: null,
     amount: 0,
     date: new Date(),
   });
 
   watchEffect(() => {
-    income.value = {
-      unit_id: selectedUnit.value ? selectedUnit.value.id : '',
-      description: props.params.description ? props.params.description : '',
-      amount: props.params.amount ? props.params.amount : 0,
-      date: props.params.date ? props.params.date : new Date(),
-    };
+    income.value.unit_id = selectedUnit.value ? selectedUnit.value.id : '';
+    income.value.method = selectedMethod.value ? selectedMethod.value : '';
+    income.value.bank = selectedBank.value ? selectedBank.value : null;
     options.value = unitStore.units;
   });
 
@@ -123,15 +124,10 @@
                 <icon-x />
               </button>
               <div class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pr-5 rtl:pl-[50px] dark:bg-[#121c2c]">
-                {{ props.params.id ? $t('edit-income') : $t('add-income') }}
+                {{ props.params.id ? $t('edit-income') : $t('new-income') }}
               </div>
               <div class="p-5">
                 <form @submit.prevent="saveIncome()">
-                  <!-- Description -->
-                  <div class="mb-5">
-                    <label for="name">{{ $t('description') }}</label>
-                    <input required id="name" type="text" :placeholder="$t('enter-description')" class="form-input" v-model="income.description" />
-                  </div>
                   <!-- Unit -->
                   <div class="mb-5">
                     <label for="name">{{ $t('unit') }}</label>
@@ -140,8 +136,43 @@
                       :options="options"
                       class="custom-multiselect"
                       :searchable="true"
-                      placeholder="Selecciona la Unidad"
+                      :placeholder="$t('select-unit')"
                       label="unit_number"
+                      selected-label=""
+                      select-label=""
+                      deselect-label=""
+                      required
+                    ></multiselect>
+                  </div>
+                  <!-- Description -->
+                  <div class="mb-5">
+                    <label for="name">{{ $t('description') }}</label>
+                    <input required id="name" type="text" :placeholder="$t('enter-description')" class="form-input" v-model="income.description" />
+                  </div>
+                  <!-- Payment Method -->
+                  <div class="mb-5">
+                    <label for="name">{{ $t('payment-method') }}</label>
+                    <multiselect
+                      v-model="selectedMethod"
+                      :options="['Transferencia', 'Pago Movil', 'Efectivo']"
+                      class="custom-multiselect"
+                      :searchable="true"
+                      :placeholder="$t('select-payment-method')"
+                      selected-label=""
+                      select-label=""
+                      deselect-label=""
+                      required
+                    ></multiselect>
+                  </div>
+                  <!-- Bank -->
+                  <div class="mb-5" v-if="selectedMethod === 'Transferencia' || selectedMethod === 'Pago Movil'">
+                    <label for="name">{{ $t('bank') }}</label>
+                    <multiselect
+                      v-model="selectedBank"
+                      :options="['Banesco', 'Mercantil', 'Provincial', 'Venezuela', 'Bicentenario', 'Banco del Tesoro', 'Banco de Venezuela', 'Otro']"
+                      class="custom-multiselect"
+                      :searchable="true"
+                      :placeholder="$t('select-bank')"
                       selected-label=""
                       select-label=""
                       deselect-label=""
@@ -151,7 +182,7 @@
                   <!-- Amount -->
                   <div class="mb-5">
                     <label for="amount">{{ $t('amount') }}</label>
-                    <input required id="amount" type="number" :placeholder="$t('enter-amount')" class="form-input" v-model="income.amount" step="0.1"/>
+                    <input required id="amount" type="number" :placeholder="$t('enter-amount')" class="form-input" v-model="income.amount" step="0.01" />
                   </div>
                   <!-- Date -->
                   <div class="mb-5">

@@ -22,3 +22,6 @@ logs
 .env
 .env.*
 !.env.example
+mvp.md
+timeline.md
+/pages/admin/invoice/viewtest

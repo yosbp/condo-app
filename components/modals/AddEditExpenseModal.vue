@@ -5,6 +5,8 @@
   import flatPickr from 'vue-flatpickr-component';
   import 'flatpickr/dist/flatpickr.css';
   import type { I18n } from 'vue-i18n';
+  import Multiselect from '@suadelabs/vue3-multiselect';
+  import '@suadelabs/vue3-multiselect/dist/vue3-multiselect.css';
 
   const { t } = useI18n<I18n>();
   interface Emit {
@@ -20,8 +22,11 @@
   const props = withDefaults(defineProps<Props>(), {});
   const emit = defineEmits<Emit>();
   const expenseStore = useExpenseStore();
+  const expenses_categories = ref();
+  const selectedCategory = ref();
 
   const expense = ref<CreateExpense>({
+    expense_category_id: '',
     description: '',
     amount: 0,
     date: new Date(),
@@ -29,10 +34,12 @@
 
   watchEffect(() => {
     expense.value = {
+      expense_category_id: selectedCategory.value ? selectedCategory.value.id : '',
       description: props.params.description ? props.params.description : '',
       amount: props.params.amount ? props.params.amount : 0,
       date: props.params.date ? props.params.date : new Date(),
     };
+    expenses_categories.value = expenseStore.expenses_categories;
   });
 
   const saveExpense = async () => {
@@ -115,26 +122,47 @@
                 {{ props.params.id ? $t('edit-expense') : $t('add-expense') }}
               </div>
               <div class="p-5">
+                <pre>{{ expense }}</pre>
                 <form @submit.prevent="saveExpense()">
+                  <!-- Category -->
+                  <div class="mb-5">
+                    <label for="name">{{ $t('category') }}</label>
+                    <Multiselect
+                      v-model="selectedCategory"
+                      :options="expenses_categories"
+                      class="custom-multiselect"
+                      :searchable="true"
+                      :placeholder="$t('select-category')"
+                      label="name"
+                      selected-label=""
+                      select-label=""
+                      deselect-label=""
+                      required
+                    ></Multiselect>
+                  </div>
                   <!-- Description -->
                   <div class="mb-5">
-                    <label for="name">{{$t('description')}}</label>
+                    <label for="name">{{ $t('description') }}</label>
                     <input required id="name" type="text" :placeholder="$t('enter-description')" class="form-input" v-model="expense.description" />
                   </div>
                   <!-- Amount -->
                   <div class="mb-5">
-                    <label for="amount">{{$t('amount')}}</label>
-                    <input required id="amount" type="number" :placeholder="$t('enter-amount')" class="form-input" v-model="expense.amount" step="0.1" />
+                    <label for="amount">{{ $t('amount') }}</label>
+                    <input required id="amount" type="number" :placeholder="$t('enter-amount')" class="form-input" v-model="expense.amount" step="0.01" />
                   </div>
                   <!-- Date -->
                   <div class="mb-5">
-                    <label for="date">{{$t('date')}}</label>
+                    <label for="date">{{ $t('date') }}</label>
                     <flat-pickr :config="rangeCalendar" v-model="expense.date" class="form-input"></flat-pickr>
                   </div>
                   <div class="mt-8 flex items-center justify-end">
-                    <button type="button" class="btn btn-outline-danger" @click="handleCloseModal()">{{$t('cancel')}}</button>
-                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4">
-                      {{ props.params.id ? $t('update') : $t('add') }}
+                    <button type="button" class="btn btn-outline-danger" @click="handleCloseModal()">{{ $t('cancel') }}</button>
+                    <button type="submit" class="btn btn-primary ltr:ml-4 rtl:mr-4" :disabled="expenseStore.loading">
+                      <span v-if="!expenseStore.loading">{{ props.params.id ? $t('update') : $t('add') }}</span>
+                      <span
+                        v-else
+                        class="animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle"
+                      ></span>
                     </button>
                   </div>
                 </form>

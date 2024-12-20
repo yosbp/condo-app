@@ -8,7 +8,6 @@ export interface Invoice{
     month: string;
     year: string;
     due_date: Date;
-    issued_date: Date;
     created_at: Date;
     updated_at: Date;
 }
@@ -21,7 +20,6 @@ export interface InvoiceCreateBody{
     total_amount: number;
     month: string;
     year: string;
-    due_date: Date;
-    issued_date: Date;
-    items: string[];
+    due_date: string;
+    expenses: string[];
 }

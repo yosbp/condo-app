@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import Vue3Datatable from '@bhplugin/vue3-datatable';
-  import { showMessage } from '#imports';
   import useIncomeStore from '~/stores/incomeStore';
   import type { CreateIncome, Income } from '~/types/Income';
   import useUnitStore from '~/stores/unitStore';
@@ -31,6 +30,8 @@
   const defaultParams = ref<CreateIncome>({
     unit_id: '',
     description: '',
+    method: '',
+    bank: null,
     amount: 0,
     date: new Date(),
   });

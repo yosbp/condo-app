@@ -26,6 +26,7 @@
   });
   
   const defaultParams = ref<CreateExpense>({
+    expense_category_id: '',
     description: '',
     amount: 0,
     date: new Date(),
@@ -51,6 +52,7 @@
 
   onMounted(async () => {
     await expenseStore.getExpenses();
+    await expenseStore.getExpensesCategories();
   });
 </script>
 

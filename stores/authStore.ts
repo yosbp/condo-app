@@ -22,6 +22,7 @@ const useAuthStore = defineStore('auth', {
 
       localStorage.setItem('token', (data.value as LoginResponse).token);
       localStorage.setItem('user', JSON.stringify((data.value as LoginResponse).user));
+      localStorage.setItem('condominium', JSON.stringify((data.value as LoginResponse).condominium));
       this.user = (data.value as LoginResponse).user;
       this.loading = false;
       return data.value as LoginResponse;

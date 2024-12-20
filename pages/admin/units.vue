@@ -92,6 +92,9 @@
           <template #created_at="data">
             {{ formatDate(data.value.created_at) }}
           </template>
+          <template #type="data">
+            {{ $t(data.value.type) }}
+          </template>
           <template #actions="data">
             <div class="flex items-center justify-center gap-4">
               <button type="button" class="btn btn-sm btn-outline-primary" @click="editUnit(data.value)">{{ $t('edit') }}</button>

@@ -12,3 +12,9 @@ export interface CreateUnitType{
     description: string;
     percentage: number;
 }
+
+export interface UnitTypeInvoice{
+    id: string;
+    name: string;
+    percentage: number;
+}

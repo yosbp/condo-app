@@ -1,3 +1,5 @@
+import type { UnitTypeInvoice } from './UnitType';
+
 export interface Condominium {
   id: string;
   administrator_id: string;
@@ -25,10 +27,26 @@ export interface CreateCondominium {
   initial_balance: number;
 }
 
+export interface UpdateCondominium {
+  name: string;
+  state: string;
+  city: string;
+  address: string;
+  postal_code: string;
+  phone: string;
+  name_to_invoice: string;
+}
+
 export interface CreateCondominiumResponse {
   condominium?: Condominium;
   message: string;
 }
+
+export interface CondominiumResponse {
+  condominium: Condominium;
+  message: string;
+}
+
 export interface CondominiumsSelectResponse {
   id: string;
   name: string;
@@ -46,6 +64,7 @@ export interface DataToInvoice {
     name_to_invoice: string;
     phone: string;
     email: string;
+    image_url: string;
   };
   expenses: {
     id: string;
@@ -55,4 +74,5 @@ export interface DataToInvoice {
     date: string;
     category: string;
   }[];
+  units_types: UnitTypeInvoice[];
 }

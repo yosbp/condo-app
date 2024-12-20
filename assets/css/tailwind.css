@@ -508,6 +508,24 @@
         @apply border-b-0;
     }
 
+    .force-light table thead tr,
+.force-light table tfoot tr {
+  @apply !bg-[#f6f8fa];
+}
+.force-light table tbody tr {
+  @apply !border-white-light/40;
+}
+.force-light table.table-hover tbody tr {
+  @apply hover:!bg-white-light/20;
+}
+.force-light table.table-striped tbody tr:nth-child(odd) {
+  @apply !bg-white-light/20;
+}
+.force-light table.dataTable-table tbody tr th,
+.force-light table.dataTable-table tbody tr td {
+  @apply border-[#e5e7eb];
+}
+
     /* code hightlight */
     pre {
         direction: ltr;

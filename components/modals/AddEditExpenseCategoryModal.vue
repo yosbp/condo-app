@@ -45,7 +45,7 @@
       };
 
       try {
-        await expenseStore.updateExpense(newExpenseCategory);
+        await expenseStore.updateExpenseCategory(newExpenseCategory);
         showMessage(t('expense-category-updated-successfully'));
         emit('update:isModalVisible', false);
         emit('getExpensesCategories');
@@ -106,7 +106,7 @@
                 <icon-x />
               </button>
               <div class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pr-5 rtl:pl-[50px] dark:bg-[#121c2c]">
-                {{ props.params.id ? $t('edit-expense-category') : $t('add-expense-category') }}
+                {{ props.params.id ? $t('edit-expense-category') : $t('new-expense-category') }}
               </div>
               <div class="p-5">
                 <form @submit.prevent="saveExpenseCategory()">

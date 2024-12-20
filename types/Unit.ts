@@ -13,6 +13,8 @@ export interface CreateUnit{
     unit_type_id: string;
     unit_number: string;
     owner_name: string;
+    owner_phone: string;
+    owner_email: string;
     type: string;
     balance: number;
 }
